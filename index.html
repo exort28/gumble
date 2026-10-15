@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Word Cards">
+<meta name="apple-mobile-web-app-title" content="Gumble">
 <meta name="theme-color" content="#e8f0fb">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-192.png">
@@ -19,7 +19,7 @@ img { max-width: 100%; }
 </style>
 </head>
 <body>
-<title>Pixel Word Cards</title>
+<title>Gumble</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -368,7 +368,7 @@ button { font: inherit; color: inherit; }
   <!-- ============ LIBRARY ============ -->
   <div class="col" id="libraryView">
     <header class="lib-head">
-      <h1 class="lib-title">Pixel Word Cards</h1>
+      <h1 class="lib-title">Gumble</h1>
       <p class="lib-stats" id="stats">&nbsp;</p>
     </header>
 
@@ -510,7 +510,7 @@ button { font: inherit; color: inherit; }
   function readSets(text) {
     let data;
     try { data = JSON.parse(text); } catch (e) { throw new Error("it isn't a day file (it can't be read as JSON)."); }
-    if (!data || data.format !== FORMAT) throw new Error("it isn't a Pixel Word Cards file.");
+    if (!data || data.format !== FORMAT) throw new Error("it isn't a Gumble day file.");
     if (!Array.isArray(data.sets) || !data.sets.length) throw new Error('it has no word sets in it.');
     const sets = data.sets.map(s => {
       const name = s && typeof s.topic === 'string' && s.topic ? `"${s.topic}"` : 'one set';
@@ -600,14 +600,14 @@ button { font: inherit; color: inherit; }
   function exportLibrary() {
     if (!library.length) { toast('The library is empty. Add a day file first.', 'bad'); return; }
     const data = { format: FORMAT, version: 1, kind: 'library', exported: new Date().toISOString(), sets: ordered(), progress };
-    saveFile(`pixel-word-cards-library-${today()}.json`, JSON.stringify(data, null, 1), 'application/json');
+    saveFile(`gumble-library-${today()}.json`, JSON.stringify(data, null, 1), 'application/json');
   }
   function exportCsv() {
     if (!library.length) { toast('The library is empty. Add a day file first.', 'bad'); return; }
     const q = v => `"${String(v).replace(/"/g, '""')}"`;
     const lines = [['day', 'date', 'topic', 'word', 'ipa', 'sentence'].join(',')];
     ordered().forEach((s, i) => s.cards.forEach(c => lines.push([i + 1, s.date, q(s.topic), q(c.word), q(c.ipa), q(c.sentence)].join(','))));
-    saveFile(`pixel-word-cards-words-${today()}.csv`, '﻿' + lines.join('\r\n'), 'text/csv');
+    saveFile(`gumble-words-${today()}.csv`, '﻿' + lines.join('\r\n'), 'text/csv');
   }
 
   /* ================= PICTURES ================= */
