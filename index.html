@@ -527,7 +527,7 @@ button { font: inherit; color: inherit; }
         seen.add(w);
         if (typeof c.sentence !== 'string' || c.sentence.split('___').length !== 2) fail(`needs one ___ blank in the sentence for "${w}".`);
         const p = c.picture;
-        if (!p || !Number.isInteger(p.width) || !Number.isInteger(p.height) || p.width < 8 || p.width > 64 || p.height < 8 || p.height > 64) fail(`has a broken picture size for "${w}".`);
+        if (!p || !Number.isInteger(p.width) || !Number.isInteger(p.height) || p.width < 8 || p.width > 128 || p.height < 8 || p.height > 128) fail(`has a broken picture size for "${w}".`);
         if (!Array.isArray(p.palette) || !p.palette.length || p.palette.length > CH.length || !p.palette.every(x => COLOR.test(x))) fail(`has broken picture colors for "${w}".`);
         if (typeof p.background !== 'string' || !COLOR.test(p.background)) fail(`has no picture background for "${w}".`);
         const allowed = '.' + CH.slice(0, p.palette.length);
@@ -613,6 +613,7 @@ button { font: inherit; color: inherit; }
   /* ================= PICTURES ================= */
   const picCache = new Map();
   function pictureCanvas(pic, scale) {
+    scale = Math.max(1, Math.round(scale * 36 / pic.width));
     const key = pic.rows.join('') + pic.palette.join('') + pic.background + scale;
     let src = picCache.get(key);
     if (!src) {
@@ -819,7 +820,7 @@ button { font: inherit; color: inherit; }
     if (patch.match) p.match = true;
     if (patch.memory) p.memory = p.memory ? Math.min(p.memory, patch.memory) : patch.memory;
     progress[set.id] = p;
-    saveAll();
+    store.set('progress', progress).then(updateFoot);
   }
 
   function show(m) {
